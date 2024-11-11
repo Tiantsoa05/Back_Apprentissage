@@ -26,4 +26,43 @@ model Professeur {
   mail_prof    String
   id_langue    Int
   langue      Langue    @relation(fields: [id_langue], references: [id])
+  cours       Cours[]
+  groupe      Groupe[]
+}
+
+model Niveau{
+  id          Int      @id @default(autoincrement())
+  nom_niveau  String
+  cours       Cours[]
+  groupe      Groupe[]
+}
+
+model Groupe {
+  id              Int      @id @default(autoincrement())
+  nom_groupe      String
+  id_niveau       Int
+  id_professeur   Int
+  professeur      Professeur   @relation(fields: [id_professeur], references: [id])
+  niveau          Niveau       @relation(fields: [id_niveau], references: [id])
+  etudiant        Etudiant[]
+}
+
+model Cours {
+  id              Int      @id @default(autoincrement())
+  nom_cours       String
+  date_debut      DateTime
+  date_fin        DateTime
+  id_professeur   Int
+  professeur      Professeur   @relation(fields: [id_professeur], references: [id])
+  id_niveau       Int
+  niveau          Niveau       @relation(fields: [id_niveau], references: [id])
+}
+
+model Etudiant {
+  id              Int      @id @default(autoincrement())
+  nom             String
+  prenoms         String
+  mail_etudiant  String
+  id_groupe       Int
+  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
 }
