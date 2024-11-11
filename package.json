@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/Tiantsoa05/Back_Apprentissage#readme",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "express": "^4.21.1",
     "nodemon": "^3.1.7",
     "prisma": "^5.22.0"
   }
