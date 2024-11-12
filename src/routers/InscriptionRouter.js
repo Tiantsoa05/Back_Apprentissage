@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { inscription } from '../controllers/inscriptionController.js';
+import { inscription } from '../controllers/InscriptionController.js';
 
 const router = Router();
 

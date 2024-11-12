@@ -63,6 +63,7 @@ model Etudiant {
   nom             String
   prenoms         String
   mail_etudiant  String
-  id_groupe       Int
-  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
+  motDePasse       String
+  id_groupe       Int?
+  groupe          Groupe?      @relation(fields: [id_groupe], references: [id])
 }

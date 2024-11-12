@@ -1,14 +1,8 @@
-const express = require('express');
-const prisma = require('@prisma/client');
-const app = express();
-const port = 3000;
+import { PrismaClient } from "@prisma/client";
 
-const { PrismaClient } = prisma;
 const prismaClient = new PrismaClient();
 
-app.use(express.json());
-
-app.post('/inscription', async (req, res) => {
+export const inscription= async (req, res) => {
     const { nom, prenoms, mail_etudiant , motDePasse} = req.body;
 
     
@@ -17,7 +11,7 @@ app.post('/inscription', async (req, res) => {
     }
 
     
-    const emailExistant = await prismaClient.etudiant.findUnique({
+    const emailExistant = await prismaClient.etudiant.findFirst({
         where: { mail_etudiant  }
     });
 
@@ -32,7 +26,7 @@ app.post('/inscription', async (req, res) => {
                 nom,
                 prenoms,
                 mail_etudiant,  // Assure-toi de hasher le mail en production!
-                motDePasse,  // Assure-toi de hasher le mot de passe en production !
+               // motDePasse,  // Assure-toi de hasher le mot de passe en production !
             }
         });
 
@@ -44,8 +38,4 @@ app.post('/inscription', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
-});
-
-app.listen(port, () => {
-    console.log(`Serveur en cours d'exécution sur http://localhost:${port}`);
-});
+}
