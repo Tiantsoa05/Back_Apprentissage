@@ -45,6 +45,7 @@ model Groupe {
   professeur      Professeur   @relation(fields: [id_professeur], references: [id])
   niveau          Niveau       @relation(fields: [id_niveau], references: [id])
   etudiant        Etudiant[]
+  forum_messages  ForumMessage[]
 }
 
 model Cours {
@@ -63,7 +64,15 @@ model Etudiant {
   nom             String
   prenoms         String
   mail_etudiant  String
-  motDePasse       String
-  id_groupe       Int?
-  groupe          Groupe?      @relation(fields: [id_groupe], references: [id])
+  id_groupe       Int
+  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
+}
+
+model ForumMessage {
+  id              Int      @id @default(autoincrement())
+  id_sender       String
+  message         String
+  message_time    DateTime
+  id_groupe       Int
+  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
 }
