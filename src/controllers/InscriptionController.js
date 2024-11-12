@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prismaClient = new PrismaClient();
 
@@ -26,7 +27,7 @@ export const inscription= async (req, res) => {
                 nom,
                 prenoms,
                 mail_etudiant,  // Assure-toi de hasher le mail en production!
-                motDePasse,  // Assure-toi de hasher le mot de passe en production !
+                motDePasse: bcrypt.hash(motDePasse),  // Assure-toi de hasher le mot de passe en production !
             }
         });
 
