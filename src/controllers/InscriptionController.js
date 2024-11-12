@@ -26,7 +26,7 @@ export const inscription= async (req, res) => {
                 nom,
                 prenoms,
                 mail_etudiant,  // Assure-toi de hasher le mail en production!
-               // motDePasse,  // Assure-toi de hasher le mot de passe en production !
+                motDePasse,  // Assure-toi de hasher le mot de passe en production !
             }
         });
 
