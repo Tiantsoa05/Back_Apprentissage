@@ -28,6 +28,7 @@ model Professeur {
   langue      Langue    @relation(fields: [id_langue], references: [id])
   cours       Cours[]
   groupe      Groupe[]
+  Chat        Chat[]
 }
 
 model Niveau{
@@ -66,6 +67,7 @@ model Etudiant {
   mail_etudiant  String
   id_groupe       Int
   groupe          Groupe      @relation(fields: [id_groupe], references: [id])
+  Chat            Chat[]
 }
 
 model ForumMessage {
@@ -75,4 +77,18 @@ model ForumMessage {
   message_time    DateTime
   id_groupe       Int
   groupe          Groupe      @relation(fields: [id_groupe], references: [id])
+}
+
+// Chat prof etudiant
+
+model Chat {
+  id              Int      @id @default(autoincrement())
+  message         String
+  id_prof         Int
+  id_etudiant     Int
+  date_sent       DateTime @default(now())
+  send_type       Int
+
+  prof           Professeur @relation(fields: [id_prof], references: [id])
+  etudiant       Etudiant @relation(fields: [id_etudiant], references: [id])
 }
