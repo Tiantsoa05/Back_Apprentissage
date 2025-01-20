@@ -4,29 +4,39 @@ import io from "../../tools/socket-io.js";
 
 const prisma = new PrismaClient();
 
-export const send = async (req, res) => {
-    const {id_prof, id_etudiant, message} = req.body;
+export const send = async (data) => {
+    const {id_prof, id_etudiant, message, send_type} = data;
 
-    const sent = await prisma.chat.create(
-        {
-            message,
-            id_prof : parseInt(id_prof),
-            id_etudiant : parseInt(id_etudiant)
-        }
-    )
-
-    const messages = await prisma.chat.findMany(
-        {
-            where:{
-                id_prof : parseInt(id_prof),
-                id_etudiant : parseInt(id_etudiant)
-            }, 
-            orderBy:{
-                date_sent: "asc"
+    try{
+        const sent = await prisma.discuter.create(
+            {
+                data:{
+                    message,
+                    id_prof : parseInt(id_prof),
+                    id_etudiant : parseInt(id_etudiant),
+                    send_type
+                }
             }
-        }
-    )
+        )
+    }catch(error){
+        console.log(error)
+    }
+}
 
-    io.emit("discussion", messages)
-
+export const fetchDiscussion = async (req,res)=>{
+    const {id_prof, id_etudiant} = req.body
+    try{
+        const messages = await prisma.discuter.findMany(
+            {
+                where:{
+                    id_prof,
+                    id_etudiant
+                }
+            }
+        )
+        res.status(200).json(messages)
+    }catch(error){
+        console.error('Erreur de connexion :', error);
+        res.status(400).json({ message: error.message });
+    }
 }

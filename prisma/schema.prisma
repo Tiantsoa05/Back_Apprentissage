@@ -14,81 +14,100 @@ datasource db {
 }
 
 model Langue {
-  id          Int      @id @default(autoincrement())
+  id_langue       Int      @id @default(autoincrement())
   nom_langue  String
   professeurs  Professeur[]
+  Cours        Cours[]
+  Dictionnaire Dictionnaire[]
 }
 
 model Professeur {
-  id          Int      @id @default(autoincrement())
-  nom         String
-  prenoms     String
+  id_prof         Int      @id @default(autoincrement())
+  nom_prof        String
+  prenom_prof    String
   mail_prof    String
+  mdp_prof   String
+  Diplome String
+  Niveau_Etude String
   id_langue    Int
-  langue      Langue    @relation(fields: [id_langue], references: [id])
+  langue      Langue    @relation(fields: [id_langue], references: [id_langue])
   cours       Cours[]
-  groupe      Groupe[]
-  Chat        Chat[]
+  payment     PayerDroit[]
+  Discuter    Discuter[]
+  Etudiant    Etudiant[]
 }
 
 model Niveau{
-  id          Int      @id @default(autoincrement())
-  nom_niveau  String
-  cours       Cours[]
-  groupe      Groupe[]
-}
-
-model Groupe {
-  id              Int      @id @default(autoincrement())
-  nom_groupe      String
-  id_niveau       Int
-  id_professeur   Int
-  professeur      Professeur   @relation(fields: [id_professeur], references: [id])
-  niveau          Niveau       @relation(fields: [id_niveau], references: [id])
+  id_niveau          Int      @id @default(autoincrement())
+  valeur_niveau  String
   etudiant        Etudiant[]
-  forum_messages  ForumMessage[]
 }
 
 model Cours {
   id              Int      @id @default(autoincrement())
-  nom_cours       String
-  date_debut      DateTime
-  date_fin        DateTime
+  titre           String
+  contenu_cours   String
+  id_langue       Int
+  langue          Langue   @relation(fields: [id_langue], references: [id_langue])
   id_professeur   Int
-  professeur      Professeur   @relation(fields: [id_professeur], references: [id])
-  id_niveau       Int
-  niveau          Niveau       @relation(fields: [id_niveau], references: [id])
+  professeur      Professeur   @relation(fields: [id_professeur], references: [id_prof])
 }
 
 model Etudiant {
-  id              Int      @id @default(autoincrement())
-  nom             String
-  prenoms         String
-  mail_etudiant  String
-  id_groupe       Int
-  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
-  Chat            Chat[]
+  id_etudiant     Int      @id @default(autoincrement())
+  nom_etudiant    String
+  prenom_etudiant String
+  e_mail          String
+  Date_Naissance  DateTime
+  mdp       String
+  id_prof        Int?
+  professeur      Professeur? @relation(fields: [id_prof], references: [id_prof])
+  id_niveau       Int?
+  niveau          Niveau?      @relation(fields: [id_niveau], references: [id_niveau])
+  payment        PayerDroit[]
+  discuter        Discuter[]  
 }
 
-model ForumMessage {
-  id              Int      @id @default(autoincrement())
-  id_sender       String
-  message         String
-  message_time    DateTime
-  id_groupe       Int
-  groupe          Groupe      @relation(fields: [id_groupe], references: [id])
+model PayerDroit {
+  id             Int       @id @default(autoincrement())
+  montant        Float    
+  date           DateTime  @default(now())  
+  id_etudiant    Int       
+  etudiant       Etudiant  @relation(fields: [id_etudiant], references: [id_etudiant])
+  id_professeur  Int      
+  professeur       Professeur @relation(fields: [id_professeur], references: [id_prof])
+}
+model Discuter{
+  id_messages Int @id @default(autoincrement())
+  message     String
+  heure_envoi DateTime @default(now())
+  send_type   Int 
+  id_prof     Int
+  professeur  Professeur @relation(fields: [id_prof], references: [id_prof])
+  id_etudiant Int
+  etudiant    Etudiant @relation(fields: [id_etudiant], references: [id_etudiant])
+}
+model Dictionnaire {
+  id_dictionnaire Int @id @default(autoincrement())
+  mot            String
+  definition  String
+  synonyme    String
+  id_langue        Int
+  langue         Langue @relation(fields: [id_langue], references: [id_langue])
 }
 
-// Chat prof etudiant
+model Exercice {
+  id_exercice Int @id @default(autoincrement())
+  titre_exercice String
+  contenu_exercice String
+}
 
-model Chat {
-  id              Int      @id @default(autoincrement())
-  message         String
-  id_prof         Int
-  id_etudiant     Int
-  date_sent       DateTime @default(now())
-  send_type       Int
+model Chapitre {
+  id_chapitre Int @id @default(autoincrement())
+}
 
-  prof           Professeur @relation(fields: [id_prof], references: [id])
-  etudiant       Etudiant @relation(fields: [id_etudiant], references: [id])
+model Examen {
+  id_examen Int @id @default(autoincrement())
+  question_examen String
+  reponse_examen String
 }

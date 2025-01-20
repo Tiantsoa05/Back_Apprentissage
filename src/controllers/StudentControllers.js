@@ -4,22 +4,21 @@ const prisma = new PrismaClient();
 
 export const getFollowerStudents = async (req, res) => {
   const { id_prof } = req.params;
-  const followers = await prisma.professeur.findUnique({
-    where:{
-        id: parseInt(id_prof)
-    },
-    select:{
-        groupe:{
-            select:{
-                etudiant:true
-            }
-        }
-    }
-    
-  });
+  
+  try{
 
-  const studentFollowers = followers?.groupe.flatMap(etudiant=>etudiant.nom) | []
+    const followers = await prisma.etudiant.findMany({
+      where:{
+        id_prof: parseInt(id_prof)
+      }
+    })
 
-  res.status(200).json(studentFollowers);
+    res.status(200).json(followers);
+
+  }catch(error){
+    console.error('Erreur de requête :', error);
+    res.status(400).json({ message: error.message });
+  }
+
 };
 
